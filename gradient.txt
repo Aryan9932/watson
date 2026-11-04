@@ -1,0 +1,33 @@
+import matplotlib.pyplot as plt
+def func(x):
+    return (x+3)**2;
+  
+
+def grad(x):
+    return 2*(x+3)
+
+
+x=2;
+learning_rate=0.1
+epoch=50
+
+
+x_vals=[x]
+y_vals=[func(x)]
+
+
+for i in range(epoch):
+    dx=grad(x)
+    x=x-learning_rate*dx;
+    x_vals.append(x)
+    y_vals.append(func(x))
+    print(f"Iteration {i+1} x = {x:0.5f} f(x) = {func(x):0.5f}")
+
+x_plot=[i for i in range(-10,5)]
+y_plot=[func(i) for i  in x_plot]
+plt.figure(figsize=(8,5))
+plt.plot(x_plot,y_plot,label="y = (x + 3)^2")
+plt.scatter(x_vals, y_vals, color='red', label="Gradient Descent Steps")
+plt.legend()
+plt.grid(True)
+plt.show()

@@ -1,0 +1,98 @@
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int n;
+
+bool isSafe(vector<vector<int>>& board, int row, int col) {
+
+    for (int i = 0; i < row; i++) {
+        if (board[i][col] == 1)
+            return false;
+    }
+
+    for (int i = row - 1, j = col - 1;
+         i >= 0 && j >= 0; i--, j--) {
+
+        if (board[i][j] == 1)
+            return false;
+    }
+
+    for (int i = row - 1, j = col + 1;
+         i >= 0 && j < n; i--, j++) {
+
+        if (board[i][j] == 1)
+            return false;
+    }
+
+    return true;
+}
+
+bool solve(vector<vector<int>>& board, int row) {
+
+    if (row == n)
+        return true;
+
+    for (int col = 0; col < n; col++) {
+
+        if (isSafe(board, row, col)) {
+
+            board[row][col] = 1;
+
+            if (solve(board, row + 1))
+                return true;
+
+            board[row][col] = 0;
+        }
+    }
+
+    return false;
+}
+
+void printBoard(vector<vector<int>>& board) {
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << board[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+
+    cout << "Enter the value of N: ";
+    cin >> n;
+
+    if (n <= 0) {
+        cout << "Invalid board size!" << endl;
+        return 0;
+    }
+
+    vector<vector<int>> board(n, vector<int>(n, 0));
+
+    int row, col;
+
+    cout << "Enter the first queen position (row col, 1-based): ";
+    cin >> row >> col;
+
+    row--;
+    col--;
+
+    if (row < 0 || row >= n || col < 0 || col >= n) {
+        cout << "Invalid position!" << endl;
+        return 0;
+    }
+
+    board[row][col] = 1;
+
+    if (solve(board, row + 1)) {
+        cout << "\nSolution:\n";
+        printBoard(board);
+    } else {
+        cout << "\nNo solution exists for this position.\n";
+    }
+
+    return 0;
+}
